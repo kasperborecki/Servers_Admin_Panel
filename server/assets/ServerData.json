@@ -1,0 +1,107 @@
+{
+  "serwery": [
+    {
+      "id": 1,
+      "name": "Ubuntu-Warszawa",
+      "createdAt": "2023-01-01",
+      "modifiedAt": "2023-06-01",
+      "status": "online",
+      "country": "Poland",
+      "ipAddress": "192.168.1.1",
+      "os": "Ubuntu 22.04",
+      "cpuCores": 8,
+      "ramGB": 32,
+      "location": "Warszawa, Mazowsze"
+    },
+    {
+      "id": 2,
+      "name": "Windows-Berlin",
+      "createdAt": "2023-02-01",
+      "modifiedAt": "2023-06-02",
+      "status": "offline",
+      "country": "Germany",
+      "ipAddress": "192.168.1.2",
+      "os": "Windows Server 2019",
+      "cpuCores": 16,
+      "ramGB": 64,
+      "location": "Berlin, Berlin"
+    },
+    {
+      "id": 3,
+      "name": "CentOS-NewYork",
+      "createdAt": "2023-03-01",
+      "modifiedAt": "2023-06-03",
+      "status": "online",
+      "country": "USA",
+      "ipAddress": "192.168.1.3",
+      "os": "CentOS 8",
+      "cpuCores": 12,
+      "ramGB": 48,
+      "location": "New York, New York"
+    },
+    {
+      "id": 4,
+      "name": "Debian-Tokyo",
+      "createdAt": "2023-04-01",
+      "modifiedAt": "2023-06-04",
+      "status": "offline",
+      "country": "Japan",
+      "ipAddress": "192.168.1.4",
+      "os": "Debian 11",
+      "cpuCores": 4,
+      "ramGB": 16,
+      "location": "Tokyo, Tokyo Metropolis"
+    }
+  ],
+
+  "contents": [
+    { "id": 1, "name": "App-Analytics", "serverId": 1, "applicationId": null, "createdAt": "2023-05-01", "modifiedAt": "2023-06-10", "type": "application" },
+    { "id": 2, "name": "App-UserManagement", "serverId": 1, "applicationId": null,  "createdAt": "2023-05-02", "modifiedAt": "2023-06-10", "type": "application" },
+    { "id": 3, "name": "App-PaymentGateway", "serverId": 1, "applicationId": null,  "createdAt": "2023-05-03", "modifiedAt": "2023-06-10", "type": "application" },
+    { "id": 4, "name": "App-Reporting", "serverId": 1, "applicationId": null,  "createdAt": "2023-05-04", "modifiedAt": "2023-06-10", "type": "application" },
+    { "id": 5, "name": "App-Inventory", "serverId": 2, "applicationId": null,  "createdAt": "2023-05-05", "modifiedAt": "2023-06-11", "type": "application" },
+    { "id": 6, "name": "App-Sales", "serverId": 2, "applicationId": null,  "createdAt": "2023-05-06", "modifiedAt": "2023-06-11", "type": "application" },
+    { "id": 7, "name": "App-HR", "serverId": 2, "applicationId": null,  "createdAt": "2023-05-07", "modifiedAt": "2023-06-11", "type": "application" },
+    { "id": 8, "name": "App-CustomerSupport", "serverId": 3, "applicationId": null,  "createdAt": "2023-05-08", "modifiedAt": "2023-06-12", "type": "application" },
+    { "id": 9, "name": "App-Marketing", "serverId": 3, "applicationId": null,  "createdAt": "2023-05-09", "modifiedAt": "2023-06-12", "type": "application" },
+    { "id": 10, "name": "App-InternalTools", "serverId": 4, "applicationId": null,  "createdAt": "2023-05-10", "modifiedAt": "2023-06-12", "type": "application" },
+    { "id": 11, "name": "Task-Analytics-Report", "serverId": 1, "applicationId": 1, "createdAt": "2023-06-01", "modifiedAt": "2023-06-15", "type": "task" },
+    { "id": 12, "name": "Task-User-Onboarding", "serverId": 1, "applicationId": 2, "createdAt": "2023-06-02", "modifiedAt": "2023-06-15", "type": "task" },
+    { "id": 13, "name": "Task-Payment-Integration", "serverId": 1, "applicationId": 3, "createdAt": "2023-06-03", "modifiedAt": "2023-06-15", "type": "task" },
+    { "id": 14, "name": "Task-Generate-Financial-Report", "serverId": 1, "applicationId": 4, "createdAt": "2023-06-04", "modifiedAt": "2023-06-15", "type": "task" },
+    { "id": 15, "name": "Task-Inventory-Check", "serverId": 2, "applicationId": 5, "createdAt": "2023-06-05", "modifiedAt": "2023-06-16", "type": "task" },
+    { "id": 16, "name": "Task-Sales-Analysis", "serverId": 2, "applicationId": 6, "createdAt": "2023-06-06", "modifiedAt": "2023-06-16", "type": "task" },
+    { "id": 17, "name": "Task-HR-Onboarding", "serverId": 2, "applicationId": 7, "createdAt": "2023-06-07", "modifiedAt": "2023-06-16", "type": "task" },
+    { "id": 18, "name": "Task-Customer-Support-Tickets", "serverId": 3, "applicationId": 8, "createdAt": "2023-06-08", "modifiedAt": "2023-06-17", "type": "task" },
+    { "id": 19, "name": "Task-Marketing-Campaign", "serverId": 3, "applicationId": null, "createdAt": "2023-06-09", "modifiedAt": "2023-06-17", "type": "task" },
+    { "id": 20, "name": "Task-Internal-Tools-Update", "serverId": 4, "applicationId": null, "createdAt": "2023-06-10", "modifiedAt": "2023-06-17", "type": "task" }
+  ],
+    "additionalInfo": [
+    { "id": 1, "contentId": 1, "description": "Aplikacja do analizy statystyk użytkowników i sprzedaży. Aplikacja do analizy statystyk użytkowników i sprzedaży. Aplikacja do analizy statystyk użytkowników i sprzedaży." },
+    { "id": 2, "contentId": 2, "description": "Zarządzanie kontami użytkowników i uprawnieniami.Zarządzanie kontami użytkowników i uprawnieniami.Zarządzanie kontami użytkowników i uprawnieniami." },
+    { "id": 3, "contentId": 3, "description": "Obsługa płatności online oraz faktur.Obsługa płatności online oraz faktur.Obsługa płatności online oraz faktur.Obsługa płatności online oraz faktur." },
+    { "id": 4, "contentId": 4, "description": "Generowanie raportów finansowych i operacyjnych.Generowanie raportów finansowych i operacyjnych.Generowanie raportów finansowych i operacyjnych." },
+    { "id": 5, "contentId": 5, "description": "Śledzenie zapasów magazynowych.Śledzenie zapasów magazynowych.Śledzenie zapasów magazynowych.Śledzenie zapasów magazynowych." },
+    { "id": 6, "contentId": 6, "description": "Moduł sprzedaży i integracja z CRM.Moduł sprzedaży i integracja z CRM.Moduł sprzedaży i integracja z CRM." },
+    { "id": 7, "contentId": 7, "description": "Obsługa działu kadr i wynagrodzeń.bsługa działu kadr i wynagrodzeń.bsługa działu kadr i wynagrodzeń.bsługa działu kadr i wynagrodzeń." },
+    { "id": 8, "contentId": 8, "description": "Pomoc klientom i zarządzanie ticketami.omoc klientom i zarządzanie ticketami.omoc klientom i zarządzanie ticketami." },
+    { "id": 9, "contentId": 9, "description": "Zarządzanie kampaniami marketingowymi.Zarządzanie kampaniami marketingowymi.Zarządzanie kampaniami marketingowymi." },
+    { "id": 11,"contentId": 10, "description": "Narzędzia wewnętrzne dla zespołów technicznych.Narzędzia wewnętrzne dla zespołów technicznych.Narzędzia wewnętrzne dla zespołów technicznych." }
+  ],
+   "comments": [
+    { "id": 1, "contentId": 1, "user": "Anna", "text": "Świetna aplikacja, bardzo pomocna!" },
+    { "id": 2, "contentId": 1, "user": "Marek", "text": "Brakuje mi raportów w czasie rzeczywistym." },
+    { "id": 3, "contentId": 2, "user": "Kasia", "text": "Intuicyjny interfejs, wszystko jasne." },
+    { "id": 4, "contentId": 2, "user": "Tomek", "text": "Można by dodać obsługę dwóch czynników logowania." },
+    { "id": 5, "contentId": 2, "user": "Piotr", "text": "Działa stabilnie, polecam." },
+    { "id": 6, "contentId": 3, "user": "Ola", "text": "Integracja z PayPal była prosta." },
+    { "id": 7, "contentId": 3, "user": "Jan", "text": "Brakuje testów bezpieczeństwa." },
+    { "id": 8, "contentId": 3, "user": "Karol", "text": "Szybko przetwarza transakcje." },
+    { "id": 9, "contentId": 3, "user": "Ewa", "text": "Czasami drobne błędy w raportach." },
+    { "id": 10,"contentId": 4, "user": "Marta", "text": "Raporty są bardzo przejrzyste." },
+    { "id": 11, "contentId": 4, "user": "Paweł", "text": "Brakuje eksportu do PDF." },
+    { "id": 12, "contentId": 5, "user": "Anna", "text": "Świetne narzędzie do magazynowania." },
+    { "id": 13, "contentId": 5, "user": "Marek", "text": "Interfejs trochę przestarzały." },
+    { "id": 14,"contentId": 5, "user": "Kasia", "text": "Działa stabilnie i szybko." }
+  ]
+}
