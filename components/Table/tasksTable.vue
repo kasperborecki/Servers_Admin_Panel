@@ -7,13 +7,11 @@ import { ApplicationRepository } from "~/repository/applicationRepository";
 import { ServerRepository } from "~/repository/serverRepository";
 import { useI18n } from "vue-i18n";
 
-
 const props = defineProps({
   headers: { type: Array, required: true },
 });
 
 const { t } = useI18n();
-
 
 const tasks = ref([]);
 const selectedRowId = ref(null);
@@ -48,6 +46,12 @@ const formattedDateRange = computed(() => {
 const repo = new TasksRepository();
 const appRepo = new ApplicationRepository();
 const serverRepo = new ServerRepository();
+
+function showSnackbar(message, type = "success") {
+  snackbarMessage.value = message;
+  snackbarColor.value = type === "success" ? "success" : "error";
+  snackbar.value = true;
+}
 
 async function fetchAllServersIds() {
   try {
@@ -100,15 +104,10 @@ async function postCreateTask(addedData) {
       ...addedData,
       serverId: addedData.serverId,
     });
-    snackbarMessage.value = t("task_added_success");
-    snackbarColor.value = "green";
-    snackbar.value = true;
+    showSnackbar(t("task_added_success"), "green");
     fetchAllTasks();
   } catch (err) {
-    error.value = err.message ?? "Nie udało się dodać zadania";
-    snackbarMessage.value = t("task_added_error");
-    snackbarColor.value = "red";
-    snackbar.value = true;
+    showSnackbar(t("task_added_error"), "error");
   }
   fetchAllTasks();
 }
@@ -120,14 +119,11 @@ async function updateTask(taskData) {
     selectedRowId.value = null;
     await nextTick();
     selectedRowId.value = currentId;
-    snackbarMessage.value = t("task_upadate_success");
-    snackbarColor.value = "green";
-    snackbar.value = true;
+
+    showSnackbar(t("task_upadate_success"), "success");
   } catch (err) {
-    console.error("Błąd przy aktualizacji zadania:", err);
-    snackbarMessage.value = t("task_update_error");
-    snackbarColor.value = "red";
-    snackbar.value = true;
+    error.value = err.message;
+    showSnackbar(t("task_update_error"), "error");
   }
   fetchAllTasks();
 }
@@ -135,15 +131,11 @@ async function updateTask(taskData) {
 async function deleteTask(selectedId) {
   try {
     await repo.deleteTask(selectedId);
-    snackbarMessage.value = t("task_delete_success");
-    snackbarColor.value = "green";
-    snackbar.value = true;
+    showSnackbar(t("task_delete_success"), "success");
     fetchAllTasks();
   } catch (err) {
     error.value = err.message;
-    snackbarMessage.value = t("task_delete_error");
-    snackbarColor.value = "red";
-    snackbar.value = true;
+    showSnackbar(t("task_delete_error"), "error");
   }
 }
 

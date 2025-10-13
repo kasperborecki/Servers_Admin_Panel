@@ -2,7 +2,6 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-// Lista języków z kodami i nazwami
 const languages = [
   { code: 'pl', name: 'Polski' },
   { code: 'en', name: 'English' },

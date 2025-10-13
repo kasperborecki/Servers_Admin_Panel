@@ -23,13 +23,19 @@ const inputRules = [
   },
 ];
 
+function isEmptyGuid(guid) {
+  return !guid || guid === "00000000-0000-0000-0000-000000000000";
+}
+
 watch(dialog, (val) => {
   if (val && props.task) {
     updatedTask.value = {
       id: props.task.id,
       name: props.task.name,
-      serverId: props.task.serverId,
-      applicationId: props.task.applicationId,
+      serverId: isEmptyGuid(props.task.serverId) ? null : props.task.serverId,
+      applicationId: isEmptyGuid(props.task.applicationId)
+        ? null
+        : props.task.applicationId,
       modifiedAt: new Date().toISOString(),
       createdAt: props.task.createdAt,
       description: props.task.description || "",
@@ -62,6 +68,15 @@ async function handleSave() {
     }, 300);
   }
 }
+
+const filteredApps = computed(() => {
+  if (!updatedTask.value.serverId) return [];
+  return props.appsList.filter(
+    (app) => app.serverId === updatedTask.value.serverId
+  );
+});
+
+
 </script>
 
 <template>
@@ -92,12 +107,11 @@ async function handleSave() {
 
           <div class="border border-gray-300 rounded-xl my-3">
             <v-select
-              :label="$t('input_server')"
+              :label="$t('input_serverId')"
               :items="serversList"
               item-title="name"
               item-value="id"
               v-model="updatedTask.serverId"
-              :rules="inputRules"
               variant="solo"
               flat
               rounded="xl"
@@ -109,11 +123,10 @@ async function handleSave() {
           <div class="border border-gray-300 rounded-xl my-3">
             <v-select
               :label="$t('header_applicationId')"
-              :items="appsList"
+              :items="filteredApps"
               item-title="name"
               item-value="id"
               v-model="updatedTask.applicationId"
-              :rules="inputRules"
               variant="solo"
               flat
               rounded="xl"

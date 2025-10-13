@@ -219,7 +219,6 @@ function serverName(id) {
             v-model:sort-by="sortBy"
             multi-sort
           >
-            <!-- Przycinanie dat po "T" -->
             <template #[`item.createdAt`]="{ item }">
               {{ item.createdAt ? item.createdAt.split("T")[0] : "" }}
             </template>

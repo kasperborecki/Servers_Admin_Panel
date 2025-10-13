@@ -4,7 +4,6 @@ import { useTheme } from "vuetify";
 
 const theme = useTheme();
 
-// Lista motywów z kodami i nazwami do wyświetlania
 const themes = ref([
   { value: 'light', title: 'Light Mode' },
   { value: 'dark', title: 'Dark Mode' },

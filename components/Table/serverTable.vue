@@ -100,7 +100,7 @@ async function updateServer(updated) {
   const statusId = updated.status ? 1 : 2;
   try {
     await repo.updateServer({ ...updated, status: statusId });
-    showSnackbar(t("server_update_success"), "success");
+    showSnackbar(t("server_upadate_success"), "success");
   } catch (err) {
     error.value = err.message;
     showSnackbar(t("server_update_error"), "error");

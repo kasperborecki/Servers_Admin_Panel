@@ -1,5 +1,5 @@
 <script setup>
-import { ref, toRaw } from "vue";
+import { ref, computed, toRaw } from "vue";
 
 const props = defineProps({
   appsIdsList: Array,
@@ -7,15 +7,16 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["add-content"]);
+
 const dialog = ref(false);
 const formRef = ref(null);
 const isLoading = ref(false);
 
 const date = new Date();
-let day = String(date.getDate()).padStart(2, "0");
-let month = String(date.getMonth() + 1).padStart(2, "0");
-let year = date.getFullYear();
-let currentDate = `${year}-${month}-${day}`;
+const day = String(date.getDate()).padStart(2, "0");
+const month = String(date.getMonth() + 1).padStart(2, "0");
+const year = date.getFullYear();
+const currentDate = `${year}-${month}-${day}`;
 
 const addedContent = ref({
   name: "",
@@ -34,6 +35,13 @@ const inputRules = [
     return true;
   },
 ];
+
+const filteredApps = computed(() => {
+  if (!addedContent.value.serverId) return [];
+  return props.appsIdsList.filter(
+    (app) => app.serverId === addedContent.value.serverId
+  );
+});
 
 function resetForm() {
   addedContent.value = {
@@ -57,7 +65,7 @@ async function handleSave() {
     return;
   }
 
-   Object.keys(addedContent.value).forEach((key) => {
+  Object.keys(addedContent.value).forEach((key) => {
     if (typeof addedContent.value[key] === "string") {
       addedContent.value[key] = addedContent.value[key].trim();
     }
@@ -118,8 +126,8 @@ async function handleSave() {
               :items="serversIdsList"
               item-title="name"
               item-value="id"
-              v-model="addedContent.serverId"
               :rules="inputRules"
+              v-model="addedContent.serverId"
               variant="solo"
               flat
               bg-color="transparent"
@@ -134,17 +142,18 @@ async function handleSave() {
           >
             <v-select
               :label="$t('input_applicationId')"
-              :items="appsIdsList"
+              :items="filteredApps"
               item-title="name"
               item-value="id"
               v-model="addedContent.applicationId"
-              :rules="inputRules"
               variant="solo"
               flat
               bg-color="transparent"
               rounded="xl"
               density="comfortable"
               hide-details
+              :disabled="!addedContent.serverId"
+              @click="handleAppSelectClick"
             />
           </div>
 
