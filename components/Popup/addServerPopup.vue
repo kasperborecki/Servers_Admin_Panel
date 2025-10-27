@@ -4,6 +4,10 @@ import { ServerRepository } from "~/repository/serverRepository";
 
 const emit = defineEmits(["post-create-server"]);
 
+const props = defineProps({
+  disabled: Boolean,
+});
+
 const formRef = ref(null);
 const isLoading = ref(false);
 
@@ -103,6 +107,7 @@ onMounted(fetchAllRamVolume);
         variant="outlined"
         color="green"
         size="x-large"
+        :disabled="props.disabled"
         >{{ $t("btn_add") }}</v-btn
       >
     </template>

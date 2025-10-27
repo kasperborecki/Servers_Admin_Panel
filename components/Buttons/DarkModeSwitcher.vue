@@ -1,39 +1,20 @@
 <script setup>
-import { ref } from "vue";
+import { computed } from "vue";
 import { useTheme } from "vuetify";
 
 const theme = useTheme();
 
-const themes = ref([
-  { value: 'light', title: 'Light Mode' },
-  { value: 'dark', title: 'Dark Mode' },
-]);
+const isDark = computed(() => theme.global.name.value === 'dark');
 
-const selectedTheme = ref(theme.global.name.value);
-
-const changeTheme = (value) => {
-  theme.global.name.value = value;
+const toggleTheme = () => {
+  theme.global.name.value = isDark.value ? 'light' : 'dark';
 };
+
+const icon = computed(() => (isDark.value ? 'mdi-brightness-2' : 'mdi-brightness-5'));
 </script>
 
 <template>
-  <v-select
-    v-model="selectedTheme"
-    :items="themes"
-    item-title="title"
-    item-value="value"
-    variant="plain"
-    hide-details
-    density="compact"
-    class="text-body-1"
-    style="max-width: 120px;"
-    @update:model-value="changeTheme"
-  />
+  <v-btn icon color="warning" @click="toggleTheme">
+    <v-icon :icon="icon" />
+  </v-btn>
 </template>
-
-<style scoped>
-.v-input--plain .v-field__input {
-  padding: 0;
-  min-height: auto;
-}
-</style>

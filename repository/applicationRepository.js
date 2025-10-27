@@ -1,67 +1,48 @@
-export class ApplicationRepository {
-  baseUrl = "https://localhost:44313/api/Application";
+import apiFetch from "../utils/fetchWrapper";
 
-    async getAll(searchQuery, formattedDateRange, page, itemsPerPage, sortBy = [], sortDesc = []) {
+export class ApplicationRepository {
+  baseUrl = "http://localhost:5052/api/Application";
+
+  async getAll(searchQuery, formattedDateRange, page, itemsPerPage, sortBy = [], sortDesc = []) {
     const params = {
       pageNumber: page,
-      pageSize: itemsPerPage
+      pageSize: itemsPerPage,
+      ...(searchQuery ? { name: searchQuery } : {}),
+      ...(formattedDateRange ? { dateRange: formattedDateRange } : {}),
+      ...(sortBy.length ? { sortBy } : {}),
+      ...(sortDesc.length ? { sortDesc } : {}),
     };
 
-    if (searchQuery) params.name = searchQuery;
-    if (formattedDateRange) params.dateRange = formattedDateRange;
-    
-    if (sortBy && sortBy.length > 0) {
-      params.sortBy = sortBy;
-    }
-    if (sortDesc && sortDesc.length > 0) {
-      params.sortDesc = sortDesc;
-    }
+    return apiFetch(this.baseUrl, { method: "GET", params });
+  }
 
-    const data = await $fetch(this.baseUrl, {
-      method: 'GET',
-      params
-    });
+  async addApplication(application) {
+    const body = {
+      name: application.name,
+      createdAt: application.createdAt,
+      modifiedAt: application.modifiedAt,
+      serverId: application.serverId,
+    };
 
-    return data;
+    return apiFetch(this.baseUrl, { method: "POST", body });
   }
 
   async updateApplication(application) {
-    const data = await $fetch(`${this.baseUrl}/${application.id}`, {
-      method: "PUT",
-      body: {
-        name: application.name,
-        createdAt: application.createdAt,
-        modifiedAt: application.modifiedAt,
-        serverId: application.serverId,
-      },
-    });
-    return data;
-  }
+    const body = {
+      name: application.name,
+      createdAt: application.createdAt,
+      modifiedAt: application.modifiedAt,
+      serverId: application.serverId,
+    };
 
-    async addApplication(application) {
-    const data = await $fetch(`${this.baseUrl}`, {
-      method: "POST",
-      body: {
-        name: application.name,
-        createdAt: application.createdAt,
-        modifiedAt: application.modifiedAt,
-        serverId: application.serverId,
-      },
-    });
-    return data;
+    return apiFetch(`${this.baseUrl}/${application.id}`, { method: "PUT", body });
   }
 
   async deleteApplication(id) {
-    const data = await $fetch(`${this.baseUrl}/${id}`, {
-      method: "DELETE",
-    });
-    return data;
+    return apiFetch(`${this.baseUrl}/${id}`, { method: "DELETE" });
   }
 
   async getAllApplicationsIds() {
-    const data = await $fetch(
-      `https://localhost:44313/api/Application/ApplicationsIds`
-    );
-    return data;
+    return apiFetch(`${this.baseUrl}/ApplicationsIds`, { method: "GET" });
   }
 }

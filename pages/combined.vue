@@ -2,6 +2,7 @@
 import CombinedTable from '~/components/Table/combinedTable.vue';
 
 const headers = [
+  { title: $t('header_select'), key: 'select', align: 'center', width: '50' },
   { title: $t('header_serverName'), key: 'serverName', align: 'center', sortable: true },
   { title: $t('header_country'), key: 'country', align: 'center', sortable: true },
   { title: $t('header_ipAddress'), key: 'ipAddress', align: 'center', sortable: true },

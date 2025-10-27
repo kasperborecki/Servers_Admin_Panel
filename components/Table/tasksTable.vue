@@ -104,7 +104,7 @@ async function postCreateTask(addedData) {
       ...addedData,
       serverId: addedData.serverId,
     });
-    showSnackbar(t("task_added_success"), "green");
+    showSnackbar(t("task_added_success"), "success");
     fetchAllTasks();
   } catch (err) {
     showSnackbar(t("task_added_error"), "error");

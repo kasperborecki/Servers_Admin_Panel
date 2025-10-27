@@ -8,15 +8,17 @@ import ServerCard from "../Card/serverCard.vue";
 
 const props = defineProps({
   headers: Array,
+  serverId: { type: String, default: null }, // <--- nowy prop
 });
 
 const { t } = useI18n();
+const auth = useAuth();
+const user = ref(auth.data.value);
 
 const servers = ref([]);
 const totalItems = ref(0);
 const loading = ref(false);
 const error = ref("");
-
 const searchQuery = ref("");
 const dateRange = ref([]);
 const page = ref(1);
@@ -29,6 +31,7 @@ const snackbarMessage = ref("");
 const snackbarColor = ref("success");
 
 const repo = new ServerRepository();
+const token = auth.token.value;
 
 const formattedDateRange = computed(() => {
   if (dateRange.value && dateRange.value.length >= 2) {
@@ -41,6 +44,8 @@ const formattedDateRange = computed(() => {
   }
   return "";
 });
+
+const isTokenMissing = computed(() => !token);
 
 async function fetchAllServers() {
   loading.value = true;
@@ -56,7 +61,8 @@ async function fetchAllServers() {
       page.value,
       itemsPerPage.value,
       columns,
-      directions
+      directions,
+      token
     );
 
     servers.value = response.items || response;
@@ -69,8 +75,31 @@ async function fetchAllServers() {
   }
 }
 
-watch([page, itemsPerPage, sortBy, searchQuery, dateRange], fetchAllServers);
-onMounted(fetchAllServers);
+async function fetchServerById(id) {
+  loading.value = true;
+  try {
+    const response = await repo.getById(id);
+    servers.value = [response];
+    totalItems.value = 1;
+  } catch (err) {
+    error.value = err.message;
+    console.error("Fetch by ID error:", err);
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(() => {
+  if (props.serverId) {
+    fetchServerById(props.serverId);
+  } else {
+    fetchAllServers();
+  }
+});
+
+watch([page, itemsPerPage, sortBy, searchQuery, dateRange, user], () => {
+  if (!props.serverId) fetchAllServers();
+});
 
 function checkServerDetails(serverId) {
   referenceId.value = serverId;
@@ -123,13 +152,13 @@ async function deleteServer(id) {
 <template>
   <v-container
     v-if="referenceId"
-    style="background-color: var(--v-theme-background);"
+    style="background-color: var(--v-theme-background)"
     class="pa-4"
   >
     <ServerCard :referenceId="referenceId" />
   </v-container>
 
-  <v-container style="background-color: var(--v-theme-background);" class="pa-4">
+  <v-container style="background-color: var(--v-theme-background)" class="pa-4">
     <v-snackbar
       v-model="snackbar"
       :color="snackbarColor"
@@ -147,7 +176,10 @@ async function deleteServer(id) {
 
     <v-card color="surface" class="border rounded-xl" elevation="2">
       <div class="my-4 d-flex justify-center items-center flex-wrap ga-3">
-        <add-server-popup @post-create-server="postCreateServer" />
+        <add-server-popup
+          @post-create-server="postCreateServer"
+          :disabled="isTokenMissing"
+        />
 
         <div
           class="border border-gray-300 rounded-xl d-flex justify-center"
@@ -190,7 +222,11 @@ async function deleteServer(id) {
               />
             </div>
           </template>
-          <v-date-picker v-model="dateRange" multiple="range" show-adjacent-months />
+          <v-date-picker
+            v-model="dateRange"
+            multiple="range"
+            show-adjacent-months
+          />
         </v-menu>
       </div>
 
@@ -204,8 +240,12 @@ async function deleteServer(id) {
         v-model:sort-by="sortBy"
         multi-sort
       >
-        <template #[`item.createdAt`]="{ item }">{{ item.createdAt.split("T")[0] }}</template>
-        <template #[`item.modifiedAt`]="{ item }">{{ item.modifiedAt.split("T")[0] }}</template>
+        <template #[`item.createdAt`]="{ item }">{{
+          item.createdAt.split("T")[0]
+        }}</template>
+        <template #[`item.modifiedAt`]="{ item }">{{
+          item.modifiedAt.split("T")[0]
+        }}</template>
         <template #[`item.status`]="{ item }">
           <v-chip
             :color="item.status.status === 'Online' ? 'success' : 'error'"
@@ -215,15 +255,29 @@ async function deleteServer(id) {
           </v-chip>
         </template>
         <template #[`item.check`]="{ item }">
-          <v-btn color="primary" variant="tonal" @click="checkServerDetails(item.id)">
+          <v-btn
+            color="primary"
+            variant="tonal"
+            @click="checkServerDetails(item.id)"
+          >
             {{ t("btn_check") }}
           </v-btn>
         </template>
         <template #[`item.actions`]="{ item }">
-          <v-btn color="error" variant="tonal" @click="deleteServer(item.id)">
+          <v-btn
+            color="error"
+            variant="tonal"
+            @click="deleteServer(item.id)"
+            :disabled="isTokenMissing"
+          >
             <v-icon size="x-large">mdi-trash-can</v-icon>
           </v-btn>
-          <update-server-popup :server="item" @update-server="updateServer" />
+
+          <update-server-popup
+            :server="item"
+            @update-server="updateServer"
+            :disabled="isTokenMissing"
+          />
         </template>
       </v-data-table-server>
     </v-card>

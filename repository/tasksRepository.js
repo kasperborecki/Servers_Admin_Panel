@@ -1,70 +1,52 @@
-export class TasksRepository {
-  baseUrl = "https://localhost:44313/api/Tasks";
+import apiFetch from "../utils/fetchWrapper";
 
-    async getAll(searchQuery, formattedDateRange, page, itemsPerPage, sortBy = [], sortDesc = []) {
+export class TasksRepository {
+  baseUrl = "http://localhost:5052/api/Tasks";
+
+  async getAll(searchQuery, formattedDateRange, page, itemsPerPage, sortBy = [], sortDesc = []) {
     const params = {
       pageNumber: page,
-      pageSize: itemsPerPage
+      pageSize: itemsPerPage,
+      ...(searchQuery ? { name: searchQuery } : {}),
+      ...(formattedDateRange ? { dateRange: formattedDateRange } : {}),
+      ...(sortBy.length ? { sortBy } : {}),
+      ...(sortDesc.length ? { sortDesc } : {}),
     };
 
-    if (searchQuery) params.name = searchQuery;
-    if (formattedDateRange) params.dateRange = formattedDateRange;
-    
-    if (sortBy && sortBy.length > 0) {
-      params.sortBy = sortBy;
-    }
-    if (sortDesc && sortDesc.length > 0) {
-      params.sortDesc = sortDesc;
-    }
-
-    const data = await $fetch(this.baseUrl, {
-      method: 'GET',
-      params
-    });
-
-    return data;
+    return apiFetch(this.baseUrl, { method: "GET", params });
   }
-
 
   async getById(id) {
-    const data = await $fetch(`${this.baseUrl}/${id}`);
-    return data;
-  }
-
-  async updateTask(updated) {
-    const data = await $fetch(`${this.baseUrl}/${updated.id}`, {
-      method: "PUT",
-      body: {
-        name: updated.name,
-        createdAt: updated.createdAt,
-        modifiedAt: updated.modifiedAt,
-        serverId: updated.serverId,
-        applicationId: updated.applicationId,
-        description: updated.description,
-      },
-    });
-    return data;
+    return apiFetch(`${this.baseUrl}/${id}`, { method: "GET" });
   }
 
   async addTask(task) {
-    const data = await $fetch(`${this.baseUrl}`, {
-      method: "POST",
-      body: {
-        name: task.name,
-        createdAt: task.createdAt,
-        modifiedAt: task.modifiedAt,
-        serverId: task.serverId,
-        applicationId: task.applicationId,
-        description: task.description,
-      },
-    });
-    return data;
+    const body = {
+      name: task.name,
+      createdAt: task.createdAt,
+      modifiedAt: task.modifiedAt,
+      serverId: task.serverId,
+      applicationId: task.applicationId,
+      description: task.description,
+    };
+
+    return apiFetch(this.baseUrl, { method: "POST", body });
+  }
+
+  async updateTask(updated) {
+    const body = {
+      name: updated.name,
+      createdAt: updated.createdAt,
+      modifiedAt: updated.modifiedAt,
+      serverId: updated.serverId,
+      applicationId: updated.applicationId,
+      description: updated.description,
+    };
+
+    return apiFetch(`${this.baseUrl}/${updated.id}`, { method: "PUT", body });
   }
 
   async deleteTask(id) {
-    const data = await $fetch(`${this.baseUrl}/${id}`, {
-      method: "DELETE",
-    });
-    return data;
+    return apiFetch(`${this.baseUrl}/${id}`, { method: "DELETE" });
   }
 }

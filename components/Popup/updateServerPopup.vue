@@ -6,6 +6,7 @@ const props = defineProps({
   server: Object,
   serversId: Array,
   appsIds: Array,
+  disabled: Boolean,
 });
 
 const emit = defineEmits(["update-server"]);
@@ -96,7 +97,7 @@ async function handleSave() {
 <template>
   <v-dialog v-model="dialog" max-width="500">
     <template #activator="{ props: activatorProps }">
-      <v-btn v-bind="activatorProps" variant="tonal" color="primary" class="ml-4">
+      <v-btn v-bind="activatorProps" variant="tonal" color="primary" class="ml-4" :disabled="props.disabled">
         <v-icon size="x-large">mdi-pencil</v-icon>
       </v-btn>
     </template>

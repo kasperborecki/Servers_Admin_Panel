@@ -1,117 +1,98 @@
+import apiFetch from "../utils/fetchWrapper";
+
 export class ServerRepository {
-  baseUrl = 'https://localhost:44313/api/Servers'
+  baseUrl = "http://localhost:5052/api/Servers";
 
-  async getAll(searchQuery, formattedDateRange, page, itemsPerPage, sortBy = [], sortDesc = []) {
+  async getAll(
+    searchQuery,
+    formattedDateRange,
+    page,
+    itemsPerPage,
+    sortBy = [],
+    sortDesc = []
+  ) {
     const params = {
       pageNumber: page,
-      pageSize: itemsPerPage
+      pageSize: itemsPerPage,
+      ...(searchQuery ? { name: searchQuery } : {}),
+      ...(formattedDateRange ? { dateRange: formattedDateRange } : {}),
+      ...(sortBy.length ? { sortBy } : {}),
+      ...(sortDesc.length ? { sortDesc } : {}),
     };
 
-    if (searchQuery) params.name = searchQuery;
-    if (formattedDateRange) params.dateRange = formattedDateRange;
-    
-    if (sortBy && sortBy.length > 0) {
-      params.sortBy = sortBy;
-    }
-    if (sortDesc && sortDesc.length > 0) {
-      params.sortDesc = sortDesc;
-    }
-
-    const data = await $fetch(this.baseUrl, {
-      method: 'GET',
-      params
-    });
-
-    return data;
+    return apiFetch(this.baseUrl, { method: "GET", params });
   }
 
-    async getAllCombined(searchQuery, formattedDateRange, page, itemsPerPage, sortBy = [], sortDesc = []) {
+  async getAllCombined(
+    searchQuery,
+    formattedDateRange,
+    page,
+    itemsPerPage,
+    sortBy = [],
+    sortDesc = []
+  ) {
     const params = {
       pageNumber: page,
-      pageSize: itemsPerPage
+      pageSize: itemsPerPage,
+      ...(searchQuery ? { name: searchQuery } : {}),
+      ...(formattedDateRange ? { dateRange: formattedDateRange } : {}),
+      ...(sortBy.length ? { sortBy } : {}),
+      ...(sortDesc.length ? { sortDesc } : {}),
     };
 
-    if (searchQuery) params.name = searchQuery;
-    if (formattedDateRange) params.dateRange = formattedDateRange;
-    
-    if (sortBy && sortBy.length > 0) {
-      params.sortBy = sortBy;
-    }
-    if (sortDesc && sortDesc.length > 0) {
-      params.sortDesc = sortDesc;
-    }
-
-    const data = await $fetch(this.baseUrl + "/get-all-combined", {
-      method: 'GET',
-      params
+    return apiFetch(`${this.baseUrl}/get-all-combined`, {
+      method: "GET",
+      params,
     });
-
-    return data;
   }
 
-  
+  async addServer(server) {
+    const body = {
+      name: server.name,
+      createdAt: server.createdAt,
+      modifiedAt: server.modifiedAt,
+      statusId: server.status,
+      country: server.country,
+      ipAddress: server.ipAddress,
+      os: server.os,
+      cpuCores: server.cpuCores,
+      ramVolumeId: server.ramGB,
+      location: server.location,
+    };
 
+    return apiFetch(this.baseUrl, { method: "POST", body });
+  }
+
+  async updateServer(updated) {
+    const body = {
+      name: updated.name,
+      createdAt: updated.createdAt,
+      modifiedAt: updated.modifiedAt,
+      statusId: updated.status,
+      country: updated.country,
+      ipAddress: updated.ipAddress,
+      os: updated.os,
+      cpuCores: updated.cpuCores,
+      ramVolumeId: updated.ramVolumeId,
+      location: updated.location,
+    };
+
+    return apiFetch(`${this.baseUrl}/${updated.id}`, { method: "PUT", body });
+  }
 
   async getById(id) {
-    const data = await $fetch(`${this.baseUrl}/${id}`)
-    return data
-  }
-  
-
-  async addServer(server){
-    console.log(server)
-    const data = await $fetch(`${this.baseUrl}`, {
-      method: 'POST',
-      body: {
-        name : server.name,
-        createdAt : server.createdAt,
-        modifiedAt : server.modifiedAt,
-        statusId : server.status,
-        country : server.country,
-        ipAddress : server.ipAddress,
-        os : server.os,
-        cpuCores : server.cpuCores,
-        ramVolumeId : server.ramGB,
-        location : server.location
-      }
-    })
-    return data
-  }
-
-    async updateServer(updated){
-    const data = await $fetch(`${this.baseUrl}/${updated.id}`, {
-      method: 'PUT',
-      body: {
-        name : updated.name,
-        createdAt : updated.createdAt,
-        modifiedAt : updated.modifiedAt,
-        statusId : updated.status,
-        country : updated.country,
-        ipAddress : updated.ipAddress,
-        os : updated.os,
-        cpuCores : updated.cpuCores,
-        ramVolumeId : updated.ramVolumeId,
-        location : updated.location
-      }
-    })
-    return data
+    return apiFetch(`${this.baseUrl}/${id}`, { method: "GET" });
   }
 
   async deleteServer(id) {
-    const data = await $fetch(`${this.baseUrl}/${id}`, {
-      method: 'DELETE'
-    })
-    return data
+    return apiFetch(`${this.baseUrl}/${id}`, { method: "DELETE" });
   }
 
-  async getAllRamVolumes(){
-    const data = await $fetch(`https://localhost:44313/api/Servers/AllRamVolume`)
-    return data
+  async getAllRamVolumes() {
+    return apiFetch(`${this.baseUrl}/AllRamVolume`, { method: "GET" });
   }
 
-  async getAllServersIds(){
-    const data = await $fetch(`https://localhost:44313/api/Servers/ServersIds`)
-    return data
+  async getAllServersIds() {
+    return apiFetch(`${this.baseUrl}/ServersIds`, { method: "GET" });
   }
 }
-

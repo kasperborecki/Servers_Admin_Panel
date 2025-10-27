@@ -29,9 +29,3 @@ const language = computed({
   />
 </template>
 
-<style scoped>
-.v-input--plain .v-field__input {
-  padding: 0;          
-  min-height: auto;    
-}
-</style>
